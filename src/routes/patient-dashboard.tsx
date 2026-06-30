@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FiHome, FiCalendar, FiUser, FiCheckCircle, FiXCircle,
   FiClock, FiUsers, FiX, FiSearch,
@@ -24,6 +24,17 @@ const ITEMS: SidebarItem[] = [
 function PatientDashboard() {
   const [active, setActive] = useState("dashboard");
   const [list, setList] = useState<PatientAppointment[]>(PATIENT_APPOINTMENTS);
+  const [userName, setUserName] = useState("Aarya Sinha");
+  const [userEmail, setUserEmail] = useState("aarya.sinha@example.com");
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("userName");
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedName) setUserName(storedName);
+    if (storedEmail) setUserEmail(storedEmail);
+  }, []);
+
+  const initials = userName.split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase();
 
   const upcoming = list.filter((a) => a.status === "Confirmed" || a.status === "Pending");
   const past = list.filter((a) => a.status === "Completed" || a.status === "Cancelled");
@@ -46,16 +57,16 @@ function PatientDashboard() {
         <div className="dash-header">
           <div>
             <h1>
-              {active === "dashboard" && "Welcome back, Aarya"}
+              {active === "dashboard" && `Welcome back, ${userName}`}
               {active === "appointments" && "Your Appointments"}
               {active === "profile" && "Your Profile"}
             </h1>
             <p>Here's a snapshot of your healthcare activity.</p>
           </div>
           <div className="dash-user">
-            <div className="av">AS</div>
+            <div className="av">{initials}</div>
             <div>
-              <b>Aarya Sinha</b>
+              <b>{userName}</b>
               <span>Patient</span>
             </div>
           </div>
@@ -106,12 +117,12 @@ function PatientDashboard() {
 
         {active === "profile" && (
           <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 22 }}>
-            <ProfileCard name="Aarya Sinha" role="Patient · Member since 2024" email="aarya.sinha@example.com" />
+            <ProfileCard name={userName} role="Patient · Member since 2024" email={userEmail} />
             <div className="dash-panel" style={{ margin: 0 }}>
               <div className="head"><h3>Personal Information</h3></div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <ProfileField label="Full Name" value="Aarya Sinha" />
-                <ProfileField label="Email" value="aarya.sinha@example.com" />
+                <ProfileField label="Full Name" value={userName} />
+                <ProfileField label="Email" value={userEmail} />
                 <ProfileField label="Phone" value="+91 98765 43210" />
                 <ProfileField label="Date of Birth" value="14 Mar 1995" />
                 <ProfileField label="Gender" value="Female" />
@@ -169,7 +180,7 @@ function AppointmentTable({
                     <div className="av">{initials}</div>
                     <div>
                       <b>{a.doctorName}</b>
-                      <span>{a.department}</span>
+                      <span style={{color: "var(--med-muted)", fontSize: 13}}>Doctor</span>
                     </div>
                   </div>
                 </td>

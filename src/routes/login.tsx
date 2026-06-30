@@ -16,6 +16,10 @@ function LoginPage() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    const nameStr = email ? email.split("@")[0] : role === "doctor" ? "Doctor" : "Patient";
+    const name = nameStr.charAt(0).toUpperCase() + nameStr.slice(1);
+    localStorage.setItem("userName", name);
+    localStorage.setItem("userEmail", email);
     navigate({ to: role === "doctor" ? "/doctor-dashboard" : "/patient-dashboard" });
   };
 

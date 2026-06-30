@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FiHome, FiCalendar, FiUsers, FiUser, FiCheckCircle, FiX,
   FiClock, FiActivity,
@@ -26,6 +26,17 @@ const ITEMS: SidebarItem[] = [
 function DoctorDashboard() {
   const [active, setActive] = useState("dashboard");
   const [schedule, setSchedule] = useState<DoctorPatient[]>(DOCTOR_SCHEDULE);
+  const [userName, setUserName] = useState("Dr. Aarav Sharma");
+  const [userEmail, setUserEmail] = useState("aarav.sharma@medicare.app");
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("userName");
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedName) setUserName(`Dr. ${storedName}`);
+    if (storedEmail) setUserEmail(storedEmail);
+  }, []);
+
+  const initials = userName.replace(/^Dr\.\s*/i, "").split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase();
 
   const totals = {
     patients: schedule.length,
@@ -44,7 +55,7 @@ function DoctorDashboard() {
         <div className="dash-header">
           <div>
             <h1>
-              {active === "dashboard" && "Good morning, Dr. Sharma"}
+              {active === "dashboard" && `Good morning, ${userName}`}
               {active === "schedule" && "Today's Schedule"}
               {active === "patients" && "Patient List"}
               {active === "appointments" && "All Appointments"}
@@ -53,9 +64,9 @@ function DoctorDashboard() {
             <p>You have {totals.patients} patients scheduled today.</p>
           </div>
           <div className="dash-user">
-            <div className="av">AS</div>
+            <div className="av">{initials}</div>
             <div>
-              <b>Dr. Aarav Sharma</b>
+              <b>{userName}</b>
               <span>Cardiologist</span>
             </div>
           </div>
@@ -96,7 +107,7 @@ function DoctorDashboard() {
 
         {active === "profile" && (
           <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 22 }}>
-            <ProfileCard name="Dr. Aarav Sharma" role="Cardiologist · 14 yrs experience" email="aarav.sharma@medicare.app" />
+            <ProfileCard name={userName} role="Cardiologist · 14 yrs experience" email={userEmail} />
             <div className="dash-panel" style={{ margin: 0 }}>
               <div className="head"><h3>Practice Details</h3></div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
