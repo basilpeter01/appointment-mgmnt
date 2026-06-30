@@ -12,11 +12,29 @@ A modern, full-stack healthcare application built on the **MERN** stack (MongoDB
 
 ## ✨ Features
 
-- **Role-Based Authentication:** Secure JWT login and registration system for two distinct roles: `Patient` and `Doctor`.
+- **Role-Based Authentication (RBAC):** Strict security roles for `Admin`, `Doctor`, and `Patient`.
+- **System Administrator:** Private, secure `/admin-dashboard` to exclusively create and provision new Doctor accounts.
 - **Patient Dashboard:** Patients can view their personal profiles and track upcoming and past appointments.
 - **Doctor Dashboard:** Doctors get a dedicated workspace to view their daily schedule, track patient lists, and edit their practice profile.
 - **Appointment Booking:** Seamless UI flow for patients to select dates, choose time slots, and book appointments with specific doctors.
 - **Dynamic State:** The UI reacts to user input. Appointments populate on dashboards only when actively booked, and doctor profiles update instantly upon editing.
+
+## 🛡️ Security & Libraries Used
+
+This project implements modern web security and architecture standards:
+
+### Backend Libraries
+- **`bcryptjs`**: Used to securely hash user passwords before storing them in MongoDB. Passwords are never stored in plain text.
+- **`jsonwebtoken` (JWT)**: Used for stateless authentication. Upon login, the server issues a digitally signed token.
+- **`mongoose`**: An Object Data Modeling (ODM) library for MongoDB that enforces a strict schema (e.g., ensuring `email` is uniquely constrained).
+- **`cors`**: Middleware to enable Cross-Origin Resource Sharing, ensuring the Vite frontend can securely talk to the Express API.
+- **`dotenv`**: Manages environment variables so secrets (like MongoDB URI and JWT Keys) are never hardcoded in the source code.
+
+### Frontend Libraries
+- **`React 19` & `Vite`**: For blazing fast rendering and hot-module replacement during development.
+- **`@tanstack/react-router`**: Type-safe, file-based routing. Allows features like "Protected Routes" (checking `localStorage` tokens before granting access to `/admin-dashboard`).
+- **`Tailwind CSS`**: Utility-first CSS framework for rapid, responsive UI design without leaving the HTML.
+- **`react-icons`**: Extensive icon library used for modern UI flourishes across the dashboards.
 
 ## 📦 Getting Started
 

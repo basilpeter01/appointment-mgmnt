@@ -29,7 +29,7 @@ function Index() {
       <section className="hero">
         <div className="med-container hero-grid">
           <div className="med-anim-up">
-            <span className="hero-eyebrow"><FiShield /> Trusted by 50,000+ patients</span>
+            <span className="hero-eyebrow"><FiShield /> Trusted Healthcare</span>
             <h1>
               Your health, <span className="accent">simplified.</span><br />
               Book doctors in minutes.
@@ -45,11 +45,6 @@ function Index() {
               <Link to="/register" className="med-btn med-btn-outline med-btn-lg">
                 Create Account
               </Link>
-            </div>
-            <div className="hero-stats">
-              <div className="hero-stat"><div className="n">500+</div><div className="l">Verified doctors</div></div>
-              <div className="hero-stat"><div className="n">25+</div><div className="l">Specialities</div></div>
-              <div className="hero-stat"><div className="n">4.9★</div><div className="l">Patient rating</div></div>
             </div>
           </div>
 
@@ -157,32 +152,10 @@ function Index() {
 
       <section className="med-section" style={{ paddingTop: 0 }}>
         <div className="med-container">
-          <div className="section-head">
-            <h2>Loved by patients across India</h2>
-          </div>
-          <div className="test-grid">
-            {[
-              { n: "Rahul K.", r: "Mumbai", t: "Booking my cardiologist took under a minute. The reminders were a lifesaver." },
-              { n: "Meera J.", r: "Bengaluru", t: "Beautiful, easy to use, and the doctors are genuinely top-tier." },
-              { n: "Sandeep P.", r: "Pune", t: "Switched my whole family to MediCare. Records in one place is brilliant." },
-            ].map((t) => (
-              <div className="test-card" key={t.n}>
-                <div className="stars">{[1,2,3,4,5].map((i) => <FiStar key={i} fill="currentColor" />)}</div>
-                <p>"{t.t}"</p>
-                <div className="who">
-                  <div className="av">{t.n[0]}</div>
-                  <div>
-                    <b>{t.n}</b><span>{t.r}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
           <div className="cta-band">
             <div>
               <h2>Ready to book your next appointment?</h2>
-              <p>Join thousands who manage their healthcare with MediCare.</p>
+              <p>Manage your healthcare with MediCare today.</p>
             </div>
             <Link to="/register" className="med-btn med-btn-lg" style={{ background: "#fff", color: "var(--med-blue-700)" }}>
               Get Started Free <FiArrowRight />
