@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as DoctorsRouteImport } from './routes/doctors'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DoctorIdRouteImport } from './routes/doctor.$id'
+import { Route as BookAppointmentIdRouteImport } from './routes/book-appointment.$id'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -40,12 +41,18 @@ const DoctorIdRoute = DoctorIdRouteImport.update({
   path: '/doctor/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BookAppointmentIdRoute = BookAppointmentIdRouteImport.update({
+  id: '/book-appointment/$id',
+  path: '/book-appointment/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/doctors': typeof DoctorsRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/book-appointment/$id': typeof BookAppointmentIdRoute
   '/doctor/$id': typeof DoctorIdRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/doctors': typeof DoctorsRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/book-appointment/$id': typeof BookAppointmentIdRoute
   '/doctor/$id': typeof DoctorIdRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,34 @@ export interface FileRoutesById {
   '/doctors': typeof DoctorsRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/book-appointment/$id': typeof BookAppointmentIdRoute
   '/doctor/$id': typeof DoctorIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/doctors' | '/login' | '/register' | '/doctor/$id'
+  fullPaths:
+    | '/'
+    | '/doctors'
+    | '/login'
+    | '/register'
+    | '/book-appointment/$id'
+    | '/doctor/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/doctors' | '/login' | '/register' | '/doctor/$id'
-  id: '__root__' | '/' | '/doctors' | '/login' | '/register' | '/doctor/$id'
+  to:
+    | '/'
+    | '/doctors'
+    | '/login'
+    | '/register'
+    | '/book-appointment/$id'
+    | '/doctor/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/doctors'
+    | '/login'
+    | '/register'
+    | '/book-appointment/$id'
+    | '/doctor/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +104,7 @@ export interface RootRouteChildren {
   DoctorsRoute: typeof DoctorsRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  BookAppointmentIdRoute: typeof BookAppointmentIdRoute
   DoctorIdRoute: typeof DoctorIdRoute
 }
 
@@ -116,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DoctorIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/book-appointment/$id': {
+      id: '/book-appointment/$id'
+      path: '/book-appointment/$id'
+      fullPath: '/book-appointment/$id'
+      preLoaderRoute: typeof BookAppointmentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -124,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   DoctorsRoute: DoctorsRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  BookAppointmentIdRoute: BookAppointmentIdRoute,
   DoctorIdRoute: DoctorIdRoute,
 }
 export const routeTree = rootRouteImport
