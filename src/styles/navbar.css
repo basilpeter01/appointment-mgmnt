@@ -1,0 +1,88 @@
+.nav-root {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid transparent;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+.nav-root.is-scrolled {
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  border-bottom-color: var(--med-line);
+  background: rgba(255, 255, 255, 0.92);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 24px;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--med-ink);
+  letter-spacing: -0.02em;
+}
+.nav-brand-mark {
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  background: var(--med-gradient);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+  font-size: 20px;
+}
+.nav-brand span b { color: var(--med-blue-600); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-link {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--med-text);
+  transition: color 0.2s, background 0.2s;
+}
+.nav-link:hover { color: var(--med-blue-600); background: var(--med-blue-50); }
+.nav-link.is-active { color: var(--med-blue-600); background: var(--med-blue-50); }
+
+.nav-cta { display: flex; align-items: center; gap: 8px; }
+
+.nav-burger {
+  display: none;
+  width: 40px; height: 40px;
+  align-items: center; justify-content: center;
+  border-radius: 10px;
+  color: var(--med-ink);
+  font-size: 22px;
+}
+.nav-burger:hover { background: var(--med-blue-50); }
+
+.nav-mobile {
+  display: none;
+  flex-direction: column;
+  padding: 16px 24px 24px;
+  gap: 6px;
+  background: #fff;
+  border-top: 1px solid var(--med-line);
+  animation: med-fade 0.2s ease;
+}
+.nav-mobile .nav-link { padding: 12px 14px; }
+.nav-mobile .nav-cta { margin-top: 8px; flex-direction: column; align-items: stretch; }
+.nav-mobile .med-btn { justify-content: center; }
+
+@media (max-width: 900px) {
+  .nav-links, .nav-cta { display: none; }
+  .nav-burger { display: inline-flex; }
+  .nav-mobile.is-open { display: flex; }
+}
