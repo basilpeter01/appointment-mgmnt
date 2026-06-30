@@ -13,14 +13,34 @@ function LoginPage() {
   const [role, setRole] = useState<"patient" | "doctor">("patient");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const nameStr = email ? email.split("@")[0] : role === "doctor" ? "Doctor" : "Patient";
-    const name = nameStr.charAt(0).toUpperCase() + nameStr.slice(1);
-    localStorage.setItem("userName", name);
-    localStorage.setItem("userEmail", email);
-    navigate({ to: role === "doctor" ? "/doctor-dashboard" : "/patient-dashboard" });
+    setLoading(true);
+    setError("");
+    
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, role })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Login failed");
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userName", data.user.name);
+      localStorage.setItem("userEmail", data.user.email);
+      
+      navigate({ to: role === "doctor" ? "/doctor-dashboard" : "/patient-dashboard" });
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -78,9 +98,10 @@ function LoginPage() {
               <a href="#">Forgot password?</a>
             </div>
 
-            <button type="submit" className="med-btn med-btn-primary med-btn-block med-btn-lg">
-              Sign In <FiArrowRight />
+            <button type="submit" disabled={loading} className="med-btn med-btn-primary med-btn-block med-btn-lg" style={{ opacity: loading ? 0.6 : 1 }}>
+              {loading ? "Signing In..." : <>Sign In <FiArrowRight /></>}
             </button>
+            {error && <div style={{ color: "var(--med-danger)", fontSize: 13, marginTop: 12, textAlign: "center" }}>{error}</div>}
           </form>
 
           <div className="auth-foot">

@@ -23,7 +23,7 @@ const ITEMS: SidebarItem[] = [
 
 function PatientDashboard() {
   const [active, setActive] = useState("dashboard");
-  const [list, setList] = useState<PatientAppointment[]>(PATIENT_APPOINTMENTS);
+  const [list, setList] = useState<PatientAppointment[]>([]);
   const [userName, setUserName] = useState("Aarya Sinha");
   const [userEmail, setUserEmail] = useState("aarya.sinha@example.com");
 
@@ -32,6 +32,9 @@ function PatientDashboard() {
     const storedEmail = localStorage.getItem("userEmail");
     if (storedName) setUserName(storedName);
     if (storedEmail) setUserEmail(storedEmail);
+    
+    const storedAppts = JSON.parse(localStorage.getItem("bookedAppointments") || "[]");
+    setList(storedAppts);
   }, []);
 
   const initials = userName.split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase();

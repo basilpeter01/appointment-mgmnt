@@ -23,15 +23,47 @@ function RegisterPage() {
   const [role, setRole] = useState<"patient" | "doctor">("patient");
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "", confirm: "" });
   const [agree, setAgree] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const strength = useMemo(() => scorePassword(form.password), [form.password]);
 
   const upd = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (form.password !== form.confirm || !agree) return;
-    navigate({ to: role === "doctor" ? "/doctor-dashboard" : "/patient-dashboard" });
+    
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          password: form.password,
+          role: role
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Registration failed");
+
+      // Save token and user
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userName", data.user.name);
+      localStorage.setItem("userEmail", data.user.email);
+      
+      navigate({ to: role === "doctor" ? "/doctor-dashboard" : "/patient-dashboard" });
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -121,9 +153,10 @@ function RegisterPage() {
               <span>I agree to MediCare's <a href="#" style={{ color: "var(--med-blue-600)", fontWeight: 600 }}>Terms of Service</a> and <a href="#" style={{ color: "var(--med-blue-600)", fontWeight: 600 }}>Privacy Policy</a>.</span>
             </label>
 
-            <button type="submit" disabled={!agree} className="med-btn med-btn-primary med-btn-block med-btn-lg" style={{ opacity: agree ? 1 : 0.6 }}>
-              Create Account <FiArrowRight />
+            <button type="submit" disabled={!agree || loading} className="med-btn med-btn-primary med-btn-block med-btn-lg" style={{ opacity: (agree && !loading) ? 1 : 0.6 }}>
+              {loading ? "Creating Account..." : <><FiArrowRight /> Create Account</>}
             </button>
+            {error && <div style={{ color: "var(--med-danger)", fontSize: 13, marginTop: 12, textAlign: "center" }}>{error}</div>}
           </form>
 
           <div className="auth-foot">

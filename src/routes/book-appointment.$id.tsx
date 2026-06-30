@@ -64,6 +64,30 @@ function BookingPage() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
+    
+    const newPatientAppt = {
+      id: "a" + Date.now(),
+      doctorId: doctor.id,
+      doctorName: doctor.name,
+      department: doctor.specialization,
+      date: selectedDate.toLocaleDateString("en-CA"), // YYYY-MM-DD
+      time: slot,
+      status: "Confirmed"
+    };
+    const savedAppts = JSON.parse(localStorage.getItem("bookedAppointments") || "[]");
+    localStorage.setItem("bookedAppointments", JSON.stringify([...savedAppts, newPatientAppt]));
+
+    const newDocAppt = {
+      id: "p" + Date.now(),
+      name: name,
+      age: 30, // Mock age
+      time: slot,
+      problem: reason,
+      status: "Waiting"
+    };
+    const savedDocAppts = JSON.parse(localStorage.getItem("bookedPatients") || "[]");
+    localStorage.setItem("bookedPatients", JSON.stringify([...savedDocAppts, newDocAppt]));
+
     setConfirmed(true);
   };
 

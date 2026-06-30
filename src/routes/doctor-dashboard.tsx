@@ -25,16 +25,37 @@ const ITEMS: SidebarItem[] = [
 
 function DoctorDashboard() {
   const [active, setActive] = useState("dashboard");
-  const [schedule, setSchedule] = useState<DoctorPatient[]>(DOCTOR_SCHEDULE);
+  const [schedule, setSchedule] = useState<DoctorPatient[]>([]);
   const [userName, setUserName] = useState("Dr. Aarav Sharma");
   const [userEmail, setUserEmail] = useState("aarav.sharma@medicare.app");
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileData, setProfileData] = useState({
+    specialization: "Interventional Cardiology",
+    qualification: "MBBS, MD (Cardiology)",
+    hospital: "Apollo Hospitals",
+    fee: "₹800",
+    languages: "English, Hindi, Marathi",
+    hours: "Mon–Sat · 10 AM – 7 PM"
+  });
 
   useEffect(() => {
     const storedName = localStorage.getItem("userName");
     const storedEmail = localStorage.getItem("userEmail");
     if (storedName) setUserName(`Dr. ${storedName}`);
     if (storedEmail) setUserEmail(storedEmail);
+    
+    const storedDocAppts = JSON.parse(localStorage.getItem("bookedPatients") || "[]");
+    setSchedule(storedDocAppts);
+
+    const storedProfile = localStorage.getItem("doctorProfile");
+    if (storedProfile) setProfileData(JSON.parse(storedProfile));
   }, []);
+
+  const saveProfile = () => {
+    localStorage.setItem("doctorProfile", JSON.stringify(profileData));
+    setIsEditing(false);
+  };
 
   const initials = userName.replace(/^Dr\.\s*/i, "").split(" ").map(n => n[0]).slice(0, 2).join("").toUpperCase();
 
@@ -67,7 +88,7 @@ function DoctorDashboard() {
             <div className="av">{initials}</div>
             <div>
               <b>{userName}</b>
-              <span>Cardiologist</span>
+              <span>{profileData.specialization}</span>
             </div>
           </div>
         </div>
@@ -107,16 +128,36 @@ function DoctorDashboard() {
 
         {active === "profile" && (
           <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 22 }}>
-            <ProfileCard name={userName} role="Cardiologist · 14 yrs experience" email={userEmail} />
+            <ProfileCard name={userName} role={`${profileData.specialization} · 14 yrs experience`} email={userEmail} />
             <div className="dash-panel" style={{ margin: 0 }}>
-              <div className="head"><h3>Practice Details</h3></div>
+              <div className="head">
+                <h3>Practice Details</h3>
+                {!isEditing ? (
+                  <button className="med-btn med-btn-outline" onClick={() => setIsEditing(true)}>Edit Profile</button>
+                ) : (
+                  <button className="med-btn med-btn-primary" onClick={saveProfile}>Save Changes</button>
+                )}
+              </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                <Field label="Specialization" value="Interventional Cardiology" />
-                <Field label="Qualification" value="MBBS, MD (Cardiology)" />
-                <Field label="Hospital" value="Apollo Hospitals" />
-                <Field label="Consultation Fee" value="₹800" />
-                <Field label="Languages" value="English, Hindi, Marathi" />
-                <Field label="Hours" value="Mon–Sat · 10 AM – 7 PM" />
+                {!isEditing ? (
+                  <>
+                    <Field label="Specialization" value={profileData.specialization} />
+                    <Field label="Qualification" value={profileData.qualification} />
+                    <Field label="Hospital" value={profileData.hospital} />
+                    <Field label="Consultation Fee" value={profileData.fee} />
+                    <Field label="Languages" value={profileData.languages} />
+                    <Field label="Hours" value={profileData.hours} />
+                  </>
+                ) : (
+                  <>
+                    <EditField label="Specialization" value={profileData.specialization} onChange={(v) => setProfileData({...profileData, specialization: v})} />
+                    <EditField label="Qualification" value={profileData.qualification} onChange={(v) => setProfileData({...profileData, qualification: v})} />
+                    <EditField label="Hospital" value={profileData.hospital} onChange={(v) => setProfileData({...profileData, hospital: v})} />
+                    <EditField label="Consultation Fee" value={profileData.fee} onChange={(v) => setProfileData({...profileData, fee: v})} />
+                    <EditField label="Languages" value={profileData.languages} onChange={(v) => setProfileData({...profileData, languages: v})} />
+                    <EditField label="Hours" value={profileData.hours} onChange={(v) => setProfileData({...profileData, hours: v})} />
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -131,6 +172,15 @@ function Field({ label, value }: { label: string; value: string }) {
     <div style={{ background: "var(--med-bg)", padding: 14, borderRadius: 12 }}>
       <div style={{ fontSize: 12, color: "var(--med-muted)" }}>{label}</div>
       <div style={{ fontSize: 15, fontWeight: 600, color: "var(--med-ink)", marginTop: 2 }}>{value}</div>
+    </div>
+  );
+}
+
+function EditField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div style={{ background: "var(--med-bg)", padding: 14, borderRadius: 12 }}>
+      <div style={{ fontSize: 12, color: "var(--med-muted)", marginBottom: 4 }}>{label}</div>
+      <input className="med-input" value={value} onChange={(e) => onChange(e.target.value)} style={{ padding: "6px 10px", fontSize: 14, width: "100%" }} />
     </div>
   );
 }
