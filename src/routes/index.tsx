@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
   FiCalendar, FiSearch, FiShield, FiClock,
   FiArrowRight, FiStar, FiUsers, FiHeart,
@@ -24,6 +25,16 @@ export const Route = createFileRoute("/")({
 const SPEC_ICONS = [FaHeartbeat, FaAllergies, FaBone, FaBaby, FaBrain, FaStethoscope];
 
 function Index() {
+  const [token, setToken] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+  
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+    setRole(localStorage.getItem("userRole"));
+  }, []);
+  
+  const dashLink = role === "admin" ? "/admin-dashboard" : role === "doctor" ? "/doctor-dashboard" : "/patient-dashboard";
+
   return (
     <SiteShell>
       <section className="hero">
@@ -42,9 +53,15 @@ function Index() {
               <Link to="/doctors" className="med-btn med-btn-primary med-btn-lg">
                 Find a Doctor <FiArrowRight />
               </Link>
-              <Link to="/register" className="med-btn med-btn-outline med-btn-lg">
-                Create Account
-              </Link>
+              {token ? (
+                <Link to={dashLink} className="med-btn med-btn-outline med-btn-lg">
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <Link to="/register" className="med-btn med-btn-outline med-btn-lg">
+                  Create Account
+                </Link>
+              )}
             </div>
           </div>
 
@@ -157,9 +174,15 @@ function Index() {
               <h2>Ready to book your next appointment?</h2>
               <p>Manage your healthcare with MediCare today.</p>
             </div>
-            <Link to="/register" className="med-btn med-btn-lg" style={{ background: "#fff", color: "var(--med-blue-700)" }}>
-              Get Started Free <FiArrowRight />
-            </Link>
+            {token ? (
+              <Link to={dashLink} className="med-btn med-btn-lg" style={{ background: "#fff", color: "var(--med-blue-700)" }}>
+                Go to Dashboard <FiArrowRight />
+              </Link>
+            ) : (
+              <Link to="/register" className="med-btn med-btn-lg" style={{ background: "#fff", color: "var(--med-blue-700)" }}>
+                Get Started Free <FiArrowRight />
+              </Link>
+            )}
           </div>
         </div>
       </section>

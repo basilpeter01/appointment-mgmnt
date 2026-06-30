@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FiCalendar, FiClock, FiUser, FiPhone, FiFileText,
   FiChevronLeft, FiChevronRight, FiCheckCircle, FiArrowRight,
@@ -31,6 +31,17 @@ function BookingPage() {
   const doctor = Route.useLoaderData();
   const navigate = useNavigate();
   const today = new Date();
+
+  // Authentication check
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate({ to: "/login" });
+      }
+    }
+  }, [navigate]);
+
 
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDate, setSelectedDate] = useState<Date>(today);

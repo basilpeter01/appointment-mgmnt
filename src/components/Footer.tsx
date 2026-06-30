@@ -14,7 +14,7 @@ export function Footer() {
             </div>
             <p>
               Smarter healthcare scheduling for patients and doctors. Book appointments,
-              track visits, and manage care from one beautifully simple dashboard.
+              track visits, and manage from one simple dashboard.
             </p>
             <div className="footer-socials">
               <a href="#" aria-label="Facebook"><FaFacebookF /></a>
@@ -28,32 +28,19 @@ export function Footer() {
             <h4>Product</h4>
             <ul>
               <li><Link to="/doctors">Find Doctors</Link></li>
-              <li><Link to="/patient-dashboard">Patient Portal</Link></li>
-              <li><Link to="/doctor-dashboard">Doctor Portal</Link></li>
               <li><Link to="/register">Get Started</Link></li>
             </ul>
           </div>
 
-          <div className="footer-col">
-            <h4>Company</h4>
-            <ul>
-              <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/contact">Contact</Link></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Privacy</a></li>
-            </ul>
-          </div>
 
           <div className="footer-col">
-            <h4>Contact</h4>
+            <h4>Github</h4>
             <ul>
-              <li className="row"><FiMapPin /><span>500 Medical Ave, Mumbai, India</span></li>
-              <li className="row"><FiPhone /><span>+91 800 123 4567</span></li>
-              <li className="row"><FiMail /><span>care@medicare.app</span></li>
+              <a href="#" aria-label="Github"></a>
             </ul>
           </div>
         </div>
-        <div className="footer-bottom">© {new Date().getFullYear()} MediCare. All rights reserved.</div>
+        <div className="footer-bottom"></div>
       </div>
     </footer>
   );
