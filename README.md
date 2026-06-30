@@ -86,9 +86,3 @@ medinova-connect/
 ├── package.json          # Project dependencies & scripts
 └── vite.config.ts        # Vite build configuration
 ```
-
-## 🛠 Next Steps & Future Enhancements
-
-- **Database-Backed Appointments:** Currently, appointments are saved to browser `localStorage` to mock the flow. The next step is to create an `Appointment` Mongoose model and build `/api/appointments` routes to save bookings permanently in MongoDB.
-- **Profile Image Uploads:** Integrate Multer or Cloudinary to allow doctors and patients to upload real avatars.
-- **Real-Time Notifications:** Add Socket.io to alert doctors instantly when a patient books a slot.
