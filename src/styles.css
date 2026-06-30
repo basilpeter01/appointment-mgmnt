@@ -1,6 +1,17 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "./styles/base.css";
+@import "./styles/navbar.css";
+@import "./styles/footer.css";
+@import "./styles/landing.css";
+@import "./styles/auth.css";
+@import "./styles/doctors.css";
+@import "./styles/doctor-profile.css";
+@import "./styles/booking.css";
+@import "./styles/dashboard.css";
+@import "./styles/components.css";
+@import "./styles/pages.css";
 
 @custom-variant dark (&:is(.dark *));
 
