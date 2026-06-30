@@ -64,7 +64,7 @@ function DoctorProfile() {
               <div className="profile-section">
                 <h3><FiMessageSquare /> Languages spoken</h3>
                 <div className="langs">
-                  {d.languages.map((l) => <span key={l} className="lang-chip">{l}</span>)}
+                  {d.languages.map((l: string) => <span key={l} className="lang-chip">{l}</span>)}
                 </div>
               </div>
 
