@@ -10,7 +10,6 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const navigate = useNavigate();
-  const [role, setRole] = useState<"patient" | "doctor">("patient");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,7 +24,7 @@ function LoginPage() {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, role })
+        body: JSON.stringify({ email, password })
       });
 
       const data = await res.json();
@@ -33,9 +32,15 @@ function LoginPage() {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("userName", data.user.name);
-      localStorage.setItem("userEmail", data.user.email);
+      localStorage.setItem("userRole", data.user.role);
       
-      navigate({ to: role === "doctor" ? "/doctor-dashboard" : "/patient-dashboard" });
+      if (data.user.role === "admin") {
+        navigate({ to: "/admin-dashboard" });
+      } else if (data.user.role === "doctor") {
+        navigate({ to: "/doctor-dashboard" });
+      } else {
+        navigate({ to: "/patient-dashboard" });
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -63,21 +68,10 @@ function LoginPage() {
 
       <div className="auth-right">
         <div className="auth-card">
-          <h2>Sign in to MediCare</h2>
-          <p className="sub">Welcome back. Please enter your details below.</p>
+          <h2>Welcome back</h2>
+          <p className="sub">Please enter your details to sign in.</p>
 
-          <div className="role-picker" style={{ marginTop: 22 }}>
-            <button type="button" className={`role-tile ${role === "patient" ? "is-active" : ""}`} onClick={() => setRole("patient")}>
-              <div className="ic"><FaHeartbeat /></div>
-              <div><b>Patient</b><span>Book & manage visits</span></div>
-            </button>
-            <button type="button" className={`role-tile ${role === "doctor" ? "is-active" : ""}`} onClick={() => setRole("doctor")}>
-              <div className="ic"><FiCalendar /></div>
-              <div><b>Doctor</b><span>Manage your schedule</span></div>
-            </button>
-          </div>
-
-          <form className="auth-form" onSubmit={submit}>
+          <form className="auth-form" onSubmit={submit} style={{ marginTop: 22 }}>
             <div className="med-field">
               <label>Email address</label>
               <div className="med-input-wrap">

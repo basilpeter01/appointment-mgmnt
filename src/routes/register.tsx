@@ -20,7 +20,6 @@ const LABELS = ["Too weak", "Weak", "Okay", "Strong", "Excellent"];
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const [role, setRole] = useState<"patient" | "doctor">("patient");
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "", confirm: "" });
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState("");
@@ -33,7 +32,7 @@ function RegisterPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (form.password !== form.confirm || !agree) return;
-    
+
     setLoading(true);
     setError("");
 
@@ -46,7 +45,7 @@ function RegisterPage() {
           email: form.email,
           phone: form.phone,
           password: form.password,
-          role: role
+          // role is forced to 'patient' by backend
         })
       });
 
@@ -57,8 +56,9 @@ function RegisterPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("userName", data.user.name);
       localStorage.setItem("userEmail", data.user.email);
-      
-      navigate({ to: role === "doctor" ? "/doctor-dashboard" : "/patient-dashboard" });
+
+      // Always redirect to patient dashboard
+      navigate({ to: "/patient-dashboard" });
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -79,7 +79,6 @@ function RegisterPage() {
         </div>
         <div className="auth-illus">
           <div className="tile"><div className="ic"><FiCalendar /></div><div><b>500+ doctors</b><span>Across 25+ specialities</span></div></div>
-          <div className="tile"><div className="ic"><FiVideo /></div><div><b>Video consultations</b><span>Care from anywhere</span></div></div>
           <div className="tile"><div className="ic"><FiShield /></div><div><b>Encrypted records</b><span>Your data is protected</span></div></div>
         </div>
       </div>
@@ -89,18 +88,7 @@ function RegisterPage() {
           <h2>Create your account</h2>
           <p className="sub">Takes less than a minute. No credit card required.</p>
 
-          <div className="role-picker" style={{ marginTop: 22 }}>
-            <button type="button" className={`role-tile ${role === "patient" ? "is-active" : ""}`} onClick={() => setRole("patient")}>
-              <div className="ic"><FaHeartbeat /></div>
-              <div><b>Patient</b><span>Book & track visits</span></div>
-            </button>
-            <button type="button" className={`role-tile ${role === "doctor" ? "is-active" : ""}`} onClick={() => setRole("doctor")}>
-              <div className="ic"><FaUserMd /></div>
-              <div><b>Doctor</b><span>Manage practice</span></div>
-            </button>
-          </div>
-
-          <form className="auth-form" onSubmit={submit}>
+          <form className="auth-form" onSubmit={submit} style={{ marginTop: 22 }}>
             <div className="med-field">
               <label>Full name</label>
               <div className="med-input-wrap">
@@ -130,8 +118,8 @@ function RegisterPage() {
               </div>
               <div className="pwd-strength">
                 <div className="pwd-bars">
-                  {[1,2,3,4].map((i) => (
-                    <div key={i} className={`bar ${strength >= i ? `is-on-${Math.min(strength,4)}` : ""}`} />
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className={`bar ${strength >= i ? `is-on-${Math.min(strength, 4)}` : ""}`} />
                   ))}
                 </div>
                 <span className="label">{LABELS[strength]}</span>

@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as DoctorsRouteImport } from './routes/doctors'
 import { Route as DoctorDashboardRouteImport } from './routes/doctor-dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AdminDashboardRouteImport } from './routes/admin-dashboard'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DoctorIdRouteImport } from './routes/doctor.$id'
@@ -50,6 +51,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/admin-dashboard',
+  path: '/admin-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -74,6 +80,7 @@ const BookAppointmentIdRoute = BookAppointmentIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin-dashboard': typeof AdminDashboardRoute
   '/contact': typeof ContactRoute
   '/doctor-dashboard': typeof DoctorDashboardRoute
   '/doctors': typeof DoctorsRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin-dashboard': typeof AdminDashboardRoute
   '/contact': typeof ContactRoute
   '/doctor-dashboard': typeof DoctorDashboardRoute
   '/doctors': typeof DoctorsRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin-dashboard': typeof AdminDashboardRoute
   '/contact': typeof ContactRoute
   '/doctor-dashboard': typeof DoctorDashboardRoute
   '/doctors': typeof DoctorsRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/admin-dashboard'
     | '/contact'
     | '/doctor-dashboard'
     | '/doctors'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/admin-dashboard'
     | '/contact'
     | '/doctor-dashboard'
     | '/doctors'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/admin-dashboard'
     | '/contact'
     | '/doctor-dashboard'
     | '/doctors'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
   ContactRoute: typeof ContactRoute
   DoctorDashboardRoute: typeof DoctorDashboardRoute
   DoctorsRoute: typeof DoctorsRoute
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin-dashboard': {
+      id: '/admin-dashboard'
+      path: '/admin-dashboard'
+      fullPath: '/admin-dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -238,6 +258,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
   ContactRoute: ContactRoute,
   DoctorDashboardRoute: DoctorDashboardRoute,
   DoctorsRoute: DoctorsRoute,

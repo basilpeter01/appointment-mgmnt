@@ -8,7 +8,7 @@ const router = express.Router();
 // Register a new user
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, phone, password, role } = req.body;
+    const { name, email, phone, password } = req.body;
 
     if (!name || !email || !phone || !password) {
       return res.status(400).json({ message: "Please enter all fields." });
@@ -30,7 +30,7 @@ router.post("/register", async (req, res) => {
       email,
       phone,
       password: hashedPassword,
-      role: role || "patient",
+      role: "patient",
     });
 
     const savedUser = await newUser.save();
@@ -72,10 +72,7 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials." });
     }
     
-    // Optional: enforce role check if needed
-    if (role && user.role !== role) {
-      return res.status(403).json({ message: `Access denied. Registered as ${user.role}.` });
-    }
+    // No frontend role enforcement needed since we use backend data
 
     // Validate password
     const isMatch = await bcrypt.compare(password, user.password);
